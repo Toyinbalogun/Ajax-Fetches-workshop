@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Multiple Fetch</title>
+  </head>
+
+  <body>
+    <script>
+      // construct a queryURL variable to use instead of the literal string inside of the fetch method
+      let title = 'star+wars'
+      let queryURL = `https://www.omdbapi.com/?s=${title}&y=&plot=short&apikey=be11a90c`
+
+      fetch(queryURL)
+        .then(function (response) {
+          console.log(response)
+          return response.json()
+        })
+        .then(function (data) {
+          console.log(data)
+          console.log(data.Search[0])
+        })
+
+      // ---------------------------------------------------------
+
+      console.log(
+        'This console.log will probably happen first because of asynchronicity.'
+      )
+      let x = 2
+      let y = 10
+      let z = 13
+      console.log(
+        'We can also assign some variables and do some arithmetic while we wait too: 2 + 10 + 13 = ',
+        x + y + z
+      )
+    </script>
+  </body>
+</html>

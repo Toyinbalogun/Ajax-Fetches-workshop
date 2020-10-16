@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Favorite Movies</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Movie Search</h1>
+
+      <!-- This form will be where users input data about the movies -->
+      <form id="movie-form">
+        <label for="movie-input">Search for a movie</label>
+        <input type="text" id="movie-input" /><br />
+
+        <!-- This button will trigger our AJAX call -->
+        <input id="find-movie" type="submit" value="Movie Search" />
+      </form>
+
+      <!-- We'll be dumping our JSON contents in here -->
+      <div id="movie-view"></div>
+
+      <script>
+        // This .onclick function will trigger the AJAX Call
+        document
+          .getElementById('find-movie')
+          .addEventListener('click', function (event) {
+            // event.preventDefault() can be used to prevent an event's default behavior.
+            // Here, it prevents the submit button from trying to submit a form when clicked
+            event.preventDefault()
+
+            // Here we grab the text from the input box
+            let movieTitle = document.getElementById('movie-input').value
+
+            // Here we construct our URL
+            let queryURL =
+              'https://www.omdbapi.com/?t=' + movieTitle + '&apikey=be11a90c'
+
+            // Write code between the dashes below to hit the queryURL with
+            // fetch, then take the response data and display it in the div
+            // with an id of 'movie-view'
+
+            // YOUR CODE GOES BETWEEN THESE DASHES.
+            // DO NOT MANUALLY EDIT THE HTML ABOVE.
+            // -----------------------------------------------------------------
+
+            fetch(queryURL)
+              .then(function (response) {
+                return response.json()
+              })
+              .then(function (movieData) {
+                document.getElementById(
+                  'movie-view'
+                ).textContent = JSON.stringify(movieData)
+              })
+
+            // -----------------------------------------------------------------
+          })
+      </script>
+    </div>
+  </body>
+</html>

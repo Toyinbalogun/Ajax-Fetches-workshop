@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Favorite Movies</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1 class="mb-4">Favorite Movies</h1>
+      <p><strong>BAISC TABLE</strong></p>
+      <p>
+        The .table class adds basic styling (light padding and only horizontal
+        dividers) to a table:
+      </p>
+      <table class="table">
+        <thead>
+          <tr>
+            <!-- The scope attribute specifies that this is a header for a column -->
+            <th scope="col">Movie Name</th>
+            <th scope="col">Year</th>
+            <th scope="col">Actors</th>
+          </tr>
+        </thead>
+        <tbody id="movie-data">
+          <tr>
+            <td>Interstellar</td>
+            <td>2014</td>
+            <td>
+              Ellen Burstyn, Matthew McConaughey, Mackenzie Foy, John Lithgow
+            </td>
+          </tr>
+          <!-- Insert additional movie rows here -->
+        </tbody>
+      </table>
+    </div>
+    <script>
+      /**
+       *  Take data returned by the OMDB API and append a row to the table body
+       *  @param {Object} movie
+       *  @param {string} movie.Title
+       *  @param {string} movie.Year
+       *  @param {string} movie.Actors
+       */
+      function createRow (movie) {
+        // Create a new table row element
+        let tRow = document.createElement('tr')
+
+        /**
+         *  Append a <td> column to the table row
+         *  @param {string} content
+         */
+        function addCell (content) {
+          let td = document.createElement('td')
+          td.textContent = content
+          tRow.appendChild(td)
+        }
+
+        addCell(movie.Title)
+        addCell(movie.Year)
+        addCell(movie.Actors)
+
+        // Finally, append the complete table row to the table body
+        document.getElementById('movie-data').appendChild(tRow)
+      }
+
+      /**
+       * Search the OMDB API for a movie with the given title.
+       * Add a new row to the table with the results.
+       * @param {string} movieTitle
+       */
+      function getMovieFromOMDB (movieTitle) {
+        fetch('https://www.omdbapi.com/?t=' + movieTitle + '&apikey=be11a90c')
+          .then(function (response) {
+            return response.json()
+          })
+          .then(function (movieData) {
+            console.log(movieData)
+            createRow(movieData)
+          })
+      }
+
+      // Search the OMDB API for the following movies, and append table rows for each
+      //getMovieFromOMDB('The last castle')
+      //getMovieFromOMDB('Shawshank Redemption')
+      //getMovieFromOMDB('Space Cowboys')
+    </script>
+  </body>
+</html>

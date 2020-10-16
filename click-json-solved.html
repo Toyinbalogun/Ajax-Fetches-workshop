@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Favorite Movies</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+    <style type="text/css">
+      button.movie {
+        margin: 1rem 1rem 1rem 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Movie Search</h1>
+
+      <!-- Movie buttons will get added here -->
+      <div id="buttons-view"></div>
+
+      <form id="movie-form" style="max-width: 800px;">
+        <div class="input-group mb-3">
+          <!-- We'll get the title for the new button from this input -->
+          <input type="text" id="movie-input" class="form-control" />
+          <div class="input-group-append">
+            <!-- Button triggers new movie to be added -->
+            <button class="btn btn-success" type="submit" id="add-movie">
+              Add a Movie, Yo!
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Movie data will get added here -->
+      <div><pre id="movie-view"></pre></div>
+
+      <script>
+        // Initial array of movie titles
+        let movieTitles = [
+          'The Matrix',
+          'The Notebook',
+          'Mr. Nobody',
+          'The Lion King'
+        ]
+
+        // Call the renderButtons function to display the initial list of movies
+        renderButtons()
+
+        // Fetch the JSON content associated with the movie title of the button
+        // that was clicked and display the results in a <div> below the <form>
+        function displayMovieInfo () {
+          let title = this.getAttribute('data-movie-title')
+          let url = `https://www.omdbapi.com/?t=${title}&apikey=be11a90c`
+          fetch(url)
+            .then(function (result) {
+              return result.json()
+            })
+            .then(function (movie) {
+              document.getElementById(
+                'movie-view'
+              ).textContent = JSON.stringify(movie, null, 2)
+              // JSON.stringify takes additional parameters to more nicely format the results
+              // @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify
+            })
+        }
+
+        // Function for displaying movie buttons
+        function renderButtons () {
+          // Get a handle for the buttons-view div
+          let buttonsView = document.getElementById('buttons-view')
+
+          // Delete the movie buttons prior to adding new movie buttons
+          // (this is necessary otherwise we will have repeat buttons)
+          buttonsView.textContent = ''
+
+          // Loop through the array of movie titles
+          movieTitles.forEach(function (title) {
+            // then dynamicaly generate a button for each movie in the array.
+            let button = document.createElement('button')
+            button.classList.add('movie', 'btn', 'btn-outline-secondary')
+            button.setAttribute('data-movie-title', title)
+            button.textContent = title
+            // then insert the button into the DOM
+            buttonsView.appendChild(button)
+            // add a click event listener to call the `displayMovieInfo` function
+            button.addEventListener('click', displayMovieInfo)
+          })
+        }
+
+        // Create an event handler function for when the 'Add a Movie, Yo!' button is clicked
+        document
+          .getElementById('add-movie')
+          .addEventListener('click', function (event) {
+            // event.preventDefault() prevents the form from trying to submit itself.
+            // We're using a form so that the user can hit enter instead of
+            // clicking the button if they want
+            event.preventDefault()
+
+            // This line will grab the text from the input box
+            let title = document.getElementById('movie-input').value.trim()
+            // The movie title from the textbox is then added to our array
+            movieTitles.push(title)
+
+            // calling renderButtons which handles the processing of our movie array
+            renderButtons()
+          })
+      </script>
+    </div>
+  </body>
+</html>
